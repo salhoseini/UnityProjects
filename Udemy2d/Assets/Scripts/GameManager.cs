@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
@@ -12,8 +13,7 @@ public class GameManager : MonoBehaviour {
 	public int enemiesPerSpawn;
 	const float spawnDelay = 0.8f;
 	[SerializeField] private int enemiesInMap;
-
-	private int enemiesOnScreen = 0;
+    public List<Enemy> EnemyList = new List<Enemy>();
 
 	private GameManager(){
 	}
@@ -43,12 +43,11 @@ public class GameManager : MonoBehaviour {
 
 	IEnumerator spawn() {
 
-		if (enemiesPerSpawn > 0 && enemiesOnScreen < totalEnemies) {
+		if (enemiesPerSpawn > 0 && EnemyList.Count < totalEnemies) {
 			for(int i = 0 ; i < enemiesPerSpawn ; i++) {
-				if (enemiesOnScreen <= maxEnemiesOnScreen) {
+				if (EnemyList.Count <= maxEnemiesOnScreen) {
 					GameObject newEnemy = Instantiate (enemies [getEnemies()]) as GameObject;
 					newEnemy.transform.position = spawnPoint.transform.position;
-					enemiesOnScreen++;
 				}
 
 			}
@@ -57,12 +56,25 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void destroyEnemyOnScreen() {
-		if (enemiesOnScreen > 0) {
-			enemiesOnScreen -= 1;
-		}
+    public void registerEnemy(Enemy enemy)
+    {
+        EnemyList.Add(enemy);
+    }
 
-	}
+    public void unregisterEnemy(Enemy enemy)
+    {
+        EnemyList.Remove(enemy);
+        Destroy(enemy.gameObject);
+    }
+
+    public void destroyAllEnemies()
+    {
+        foreach(Enemy enemy in EnemyList)
+        {
+            unregisterEnemy(enemy);
+        }
+        EnemyList.Clear();
+    }
 
 	private int getEnemies() {
 		Random r = new Random();
