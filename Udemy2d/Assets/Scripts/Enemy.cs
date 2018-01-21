@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 
@@ -16,6 +16,10 @@ public class Enemy : MonoBehaviour {
     private Animator enemyAnim;
     private Collider2D enemyCollider;
 	private float navigationTime;
+    private float currentHealthInBar;
+    private int maxHealthInBar;
+
+    private Image healthBar;
 
     public bool IsDead
     {
@@ -25,11 +29,17 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
-		enemy = GetComponent<Transform> ();
+    // Use this for initialization
+    void Start () {
+        
+        enemy = GetComponent<Transform> ();
         enemyCollider = GetComponent<Collider2D>();
         enemyAnim = GetComponent<Animator>();
+
+        healthBar = enemy.Find("CanvasEnemy").Find("healthBG").Find("health").GetComponent<Image>();
+        currentHealthInBar = 100;
+        maxHealthInBar = 100;
+
         GameManager.getInstance().registerEnemy(this);
 	}
 	
@@ -66,13 +76,14 @@ public class Enemy : MonoBehaviour {
 
     public void enemyHit(int hitPoints)
     {
+        currentHealthInBar = currentHealthInBar - (hitPoints * maxHealthInBar) / health;
+        healthBar.fillAmount = currentHealthInBar / maxHealthInBar;
         health = health - hitPoints;
         GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().Hit);
-        if(health <=0)
+        if(health <=0 || currentHealthInBar <= 0)
         {
             die();
             enemyAnim.SetTrigger("didDie");
-            //Destroy(this);
         } else
         {
             enemyAnim.Play("hurt");

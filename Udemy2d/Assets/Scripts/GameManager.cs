@@ -173,8 +173,9 @@ public class GameManager : MonoBehaviour {
 
 	private int getEnemies() {
 		Random r = new Random();
-		int result = Random.Range (0, enemiesInMap);
-		return result;
+        //int result = Random.Range (0, enemiesInMap);
+        int result = 1;
+        return result;
 	}
 
     public void addMoney(int value)
