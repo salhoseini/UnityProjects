@@ -7,6 +7,7 @@ public class Tower : MonoBehaviour {
     [SerializeField] private float attackRadius;
     [SerializeField] private float attackDelay;
     [SerializeField] private Projectile projectile;
+    [SerializeField] private AudioClip projectileSound;
     private Enemy targetEnemy = null;
     private float attackCounter;
     private bool readyToAttack = false;
@@ -55,6 +56,17 @@ public class Tower : MonoBehaviour {
         if(targetEnemy != null || !targetEnemy.IsDead)
         {
             Projectile newProjectile = Instantiate(projectile) as Projectile;
+            GameManager.getInstance().AudioSource.PlayOneShot(projectileSound);
+            /*if(projectile.ProType.Equals(ProjectileType.arrow))
+            {
+                GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().Arrow);
+            } else if (projectile.ProType.Equals(ProjectileType.rock))
+            {
+                GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().Rock);
+            } else if (projectile.ProType.Equals(ProjectileType.fire))
+            {
+                GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().FireBall);
+            }*/
             newProjectile.transform.localPosition = transform.localPosition;
             StartCoroutine(shootProjectile(newProjectile));
         }

@@ -9,10 +9,12 @@ public class Enemy : MonoBehaviour {
 	public float navigationUpdate;
 	public float enemySpeed;
     [SerializeField] private int health;
+    [SerializeField] private int awardAmount;
     private bool isDead = false;
 
 	private Transform enemy;
     private Animator enemyAnim;
+    private Collider2D enemyCollider;
 	private float navigationTime;
 
     public bool IsDead
@@ -26,6 +28,7 @@ public class Enemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		enemy = GetComponent<Transform> ();
+        enemyCollider = GetComponent<Collider2D>();
         enemyAnim = GetComponent<Animator>();
         GameManager.getInstance().registerEnemy(this);
 	}
@@ -50,7 +53,10 @@ public class Enemy : MonoBehaviour {
 			target += 1;
 		} else if (other.tag == "Finish") {
 			GameManager.getInstance().unregisterEnemy(this);
-		} else if(other.tag == "projectile")
+            GameManager.getInstance().TotalEscaped += 1;
+            GameManager.getInstance().RoundEscaped += 1;
+            GameManager.getInstance().isWaveOVer();
+        } else if(other.tag == "projectile")
         {
             Projectile newProjectile = other.gameObject.GetComponent<Projectile>();
             enemyHit(newProjectile.AttackStrength);
@@ -61,21 +67,25 @@ public class Enemy : MonoBehaviour {
     public void enemyHit(int hitPoints)
     {
         health = health - hitPoints;
+        GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().Hit);
         if(health <=0)
         {
             die();
             enemyAnim.SetTrigger("didDie");
-            // call death animation
             //Destroy(this);
         } else
         {
             enemyAnim.Play("hurt");
-            //call hurt animation
         }
     }
 
     private void die()
     {
+        GameManager.getInstance().TotalKilled += 1;
+        Destroy(enemyCollider);
+        GameManager.getInstance().isWaveOVer();
+        GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().Death);
         isDead = true;
+        GameManager.getInstance().addMoney(awardAmount);
     }
 }

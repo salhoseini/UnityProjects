@@ -3,10 +3,11 @@ using System.Collections;
 
 public class TowerController : MonoBehaviour {
 
-    [SerializeField] private GameObject towerObject;
+    [SerializeField] private Tower towerObject;
     [SerializeField] private Sprite dragSprite;
+    [SerializeField] private int towerPrice;
 
-	public GameObject TowerObject {
+    public Tower TowerObject {
 		get{ 
 			return towerObject;
 		}
@@ -17,6 +18,14 @@ public class TowerController : MonoBehaviour {
         get
         {
             return dragSprite;
+        }
+    }
+
+    public int TowerPrice
+    {
+        get
+        {
+            return towerPrice;
         }
     }
 }
