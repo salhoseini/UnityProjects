@@ -78,6 +78,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Accessories\AccessoriesBtn.cs" />
+    <Compile Include="Assets\Scripts\Accessories\Accessory.cs" />
+    <Compile Include="Assets\Scripts\Accessories\AccessoryManager.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Loader.cs" />

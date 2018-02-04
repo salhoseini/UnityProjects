@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject spawnPoint;
 	public GameObject[] enemies;
-    [SerializeField] public int totalEnemies = 3;
+    [SerializeField] public int totalEnemies;
 	public int enemiesPerSpawn;
 	const float spawnDelay = 0.8f;
 	[SerializeField] private int enemiesInMap;
@@ -245,6 +245,7 @@ public class GameManager : MonoBehaviour {
                 break;
         }
         destroyAllEnemies();
+        AccessoryManager.getInstance().resetAccessoriesList();
         TotalKilled = 0;
         RoundEscaped = 0;
         currentWaveLabel.text = "Wave " + waveNumber;

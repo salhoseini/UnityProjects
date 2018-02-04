@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 9aeb2c542cf989d4295f88e64fbde790
-timeCreated: 1516562662
+timeCreated: 1517588875
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -11,6 +11,7 @@ TextureImporter:
     21300008: playButton
     21300010: towerDisplay
     21300012: healthbar
+    21300014: button_bg
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -178,6 +179,19 @@ TextureImporter:
         y: 1536
         width: 285
         height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: button_bg
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 248
+        width: 173
+        height: 213
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

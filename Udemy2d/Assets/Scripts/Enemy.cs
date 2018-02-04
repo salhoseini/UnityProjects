@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
@@ -10,9 +12,17 @@ public class Enemy : MonoBehaviour {
 	public float enemySpeed;
     [SerializeField] private int health;
     [SerializeField] private int awardAmount;
-    private bool isDead = false;
+    [SerializeField] private int attackPower;
+    [SerializeField] private float attackDelay;
+    [SerializeField] private float attackRadius;
 
-	private Transform enemy;
+    private Accessory targetSpike;
+    private float attackCounter;
+    private bool isDead = false;
+    private bool isAttacking = false;
+    private bool readyToAttack = false;
+
+    private Transform enemy;
     private Animator enemyAnim;
     private Collider2D enemyCollider;
 	private float navigationTime;
@@ -42,10 +52,18 @@ public class Enemy : MonoBehaviour {
 
         GameManager.getInstance().registerEnemy(this);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (wayPoints != null && !isDead) {
+
+    void FixedUpdate()
+    {
+        if(readyToAttack)
+        {
+            attack(targetSpike);
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
+		if (wayPoints != null && !isDead && !isAttacking) {
 			navigationTime += Time.deltaTime;
 			if (navigationTime > navigationUpdate) {
 				if (target < wayPoints.Length) {
@@ -56,9 +74,35 @@ public class Enemy : MonoBehaviour {
 				navigationTime = 0;
 			}
 		}
-	}
 
-	void OnTriggerEnter2D(Collider2D other) {
+        attackCounter -= Time.deltaTime;
+        targetSpike = getTargetsInRange();
+        if (targetSpike != null && !targetSpike.IsDestroyed)
+        {
+            if(Vector2.Distance(transform.localPosition, targetSpike.transform.localPosition) >= attackRadius)
+            {
+                targetSpike = null;
+                readyToAttack = false;
+            }
+            if (attackCounter <= 0)
+            {
+                readyToAttack = true;
+                attackCounter = attackDelay;
+            }
+            else
+            {
+                readyToAttack = false;
+            }
+        } else
+        {
+            isAttacking = false;
+            readyToAttack = false;
+        }
+
+
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "checkpoint") {
 			target += 1;
 		} else if (other.tag == "Finish") {
@@ -69,10 +113,47 @@ public class Enemy : MonoBehaviour {
         } else if(other.tag == "projectile")
         {
             Projectile newProjectile = other.gameObject.GetComponent<Projectile>();
-            enemyHit(newProjectile.AttackStrength);
-            Destroy(other.gameObject);
+            if(newProjectile != null)
+            {
+                enemyHit(newProjectile.AttackStrength);
+                Destroy(other.gameObject);
+            }
         }
-	}
+    }
+
+    public Accessory getTargetsInRange()
+    {
+        Accessory result = null;
+        foreach (Accessory spike in AccessoryManager.getInstance().Accessories)
+        {
+            if(!spike.IsDestroyed)
+            {
+                if (Vector2.Distance(transform.localPosition, spike.transform.localPosition) <= attackRadius)
+                {
+                    result = spike;
+                    break;
+                }
+            }
+            
+        }
+        return result;
+        
+    }
+
+    public void attack(Accessory accessory)
+    {
+        if(accessory != null)
+        {
+            readyToAttack = false;
+            isAttacking = true;
+            enemyAnim.Play("attacking");
+            accessory.accessoryHit(attackPower);
+            if (accessory.IsDestroyed)
+            {
+                isAttacking = false;
+            }
+        }
+    }
 
     public void enemyHit(int hitPoints)
     {
@@ -92,6 +173,7 @@ public class Enemy : MonoBehaviour {
 
     private void die()
     {
+        isAttacking = false;
         GameManager.getInstance().TotalKilled += 1;
         Destroy(enemyCollider);
         GameManager.getInstance().isWaveOVer();

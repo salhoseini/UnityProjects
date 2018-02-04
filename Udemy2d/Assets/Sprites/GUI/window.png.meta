@@ -1,11 +1,12 @@
 fileFormatVersion: 2
 guid: 06481ceb0bea52d4a897f15aa0bc0ad3
-timeCreated: 1515956969
+timeCreated: 1517106431
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: GameBanner
     21300002: StatsDisplay
+    21300004: BANNER2
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -96,7 +97,7 @@ TextureImporter:
         width: 1155
         height: 177
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -108,6 +109,19 @@ TextureImporter:
         y: 5416
         width: 1011
         height: 95
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BANNER2
+      rect:
+        serializedVersion: 2
+        x: 3490
+        y: 6137
+        width: 1011
+        height: 94
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

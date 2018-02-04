@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tower : MonoBehaviour {
 
@@ -8,13 +9,59 @@ public class Tower : MonoBehaviour {
     [SerializeField] private float attackDelay;
     [SerializeField] private Projectile projectile;
     [SerializeField] private AudioClip projectileSound;
+    [SerializeField] private int health;
+
+    private Transform tower;
+    private bool isDestroyed = false;
     private Enemy targetEnemy = null;
     private float attackCounter;
     private bool readyToAttack = false;
+    private Collider2D towerCollider;
+    private Collider2D site;
+
+    public bool IsDestroyed
+    {
+        get
+        {
+            return isDestroyed;
+        }
+        set
+        {
+            isDestroyed = value;
+        }
+    }
+
+    public Collider2D Site
+    {
+        get
+        {
+            return site;
+        }
+
+        set
+        {
+            site = value;
+        }
+    }
+    public Collider2D TowerCollider
+    {
+        get
+        {
+            return towerCollider;
+        }
+
+        set
+        {
+            towerCollider = value;
+        }
+    }
+
 
     public void Start()
     {
-        
+
+        towerCollider = GetComponent<Collider2D>();
+        tower = GetComponent<Transform>();
     }
 
     public void Update()
@@ -57,16 +104,6 @@ public class Tower : MonoBehaviour {
         {
             Projectile newProjectile = Instantiate(projectile) as Projectile;
             GameManager.getInstance().AudioSource.PlayOneShot(projectileSound);
-            /*if(projectile.ProType.Equals(ProjectileType.arrow))
-            {
-                GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().Arrow);
-            } else if (projectile.ProType.Equals(ProjectileType.rock))
-            {
-                GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().Rock);
-            } else if (projectile.ProType.Equals(ProjectileType.fire))
-            {
-                GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().FireBall);
-            }*/
             newProjectile.transform.localPosition = transform.localPosition;
             StartCoroutine(shootProjectile(newProjectile));
         }

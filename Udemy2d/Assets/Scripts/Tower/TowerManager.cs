@@ -103,6 +103,7 @@ public class TowerManager : MonoBehaviour
         {
             Tower newTower = Instantiate(selectedTowerBtn.TowerObject);
             newTower.transform.position = hit.transform.position;
+            newTower.Site = hit.collider;
             registerTower(newTower);
             disableDragSprite();
         }
