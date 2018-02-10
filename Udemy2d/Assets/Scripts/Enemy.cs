@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour {
     private bool isDead = false;
     private bool isAttacking = false;
     private bool readyToAttack = false;
+    private bool stayIdle = false;
 
     private Transform enemy;
     private Animator enemyAnim;
@@ -36,6 +37,19 @@ public class Enemy : MonoBehaviour {
         get
         {
             return isDead;
+        }
+    }
+
+    public bool StayIdle
+    {
+        get
+        {
+            return stayIdle;
+        }
+
+        set
+        {
+            stayIdle = value;
         }
     }
 
@@ -63,7 +77,7 @@ public class Enemy : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		if (wayPoints != null && !isDead && !isAttacking) {
+		if (wayPoints != null && !isDead && !isAttacking && !StayIdle) {
 			navigationTime += Time.deltaTime;
 			if (navigationTime > navigationUpdate) {
 				if (target < wayPoints.Length) {
@@ -97,6 +111,12 @@ public class Enemy : MonoBehaviour {
         {
             isAttacking = false;
             readyToAttack = false;
+        }
+
+        if(StayIdle)
+        {
+            // play taunting animation
+            enemyAnim.SetTrigger("didWin");
         }
 
 
@@ -147,6 +167,7 @@ public class Enemy : MonoBehaviour {
             readyToAttack = false;
             isAttacking = true;
             enemyAnim.Play("attacking");
+            GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().EnemyAttack);
             accessory.accessoryHit(attackPower);
             if (accessory.IsDestroyed)
             {

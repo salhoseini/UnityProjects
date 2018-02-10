@@ -74,6 +74,7 @@ public class BuildSiteManager : MonoBehaviour {
             newBuildSite.Site = hit.collider;
             //registerTower(newTower);
             disableDragSprite();
+            selectedBuildSiteBtn = null;
         }
     }
 

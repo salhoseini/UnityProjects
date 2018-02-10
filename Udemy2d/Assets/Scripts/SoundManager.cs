@@ -15,6 +15,8 @@ public class SoundManager : MonoBehaviour {
     [SerializeField] private AudioClip gameOver;
     [SerializeField] private AudioClip newGame;
     [SerializeField] private AudioClip towerBuilt;
+    [SerializeField] private AudioClip enemyAttack;
+    [SerializeField] private AudioClip roadBlockDestroyed;
 
     private SoundManager ()
     {
@@ -106,6 +108,22 @@ public class SoundManager : MonoBehaviour {
         get
         {
             return towerBuilt;
+        }
+    }
+
+    public AudioClip EnemyAttack
+    {
+        get
+        {
+            return enemyAttack;
+        }
+    }
+
+    public AudioClip RoadBlockDestroyed
+    {
+        get
+        {
+            return roadBlockDestroyed;
         }
     }
 

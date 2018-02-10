@@ -107,6 +107,7 @@ public class TowerManager : MonoBehaviour
             registerTower(newTower);
             disableDragSprite();
         }
+        selectedTowerBtn = null;
     }
 
     public void buyTower(int price)

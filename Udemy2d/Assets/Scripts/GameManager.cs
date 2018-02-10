@@ -172,9 +172,13 @@ public class GameManager : MonoBehaviour {
     }
 
 	private int getEnemies() {
+        int range = waveNumber - 1;
 		Random r = new Random();
-        //int result = Random.Range (0, enemiesInMap);
-        int result = 1;
+        if(range > 2)
+        {
+            range = 3;
+        }
+        int result = Random.Range (0, range);
         return result;
 	}
 
@@ -201,17 +205,27 @@ public class GameManager : MonoBehaviour {
         return false;
     }
 
+    public void stopEnemies()
+    {
+        foreach(Enemy enemy in EnemyList)
+        {
+            enemy.StayIdle = true;
+        }
+    }
+
     public void setCurrentGameState()
     {
         if(totalEscaped >= 10)
         {
             currentState = GameStatus.gameover;
             AudioSource.PlayOneShot(SoundManager.getInstance().GameOver);
+            stopEnemies();
+            showMenu();
         } else if(waveNumber >= maxWaves)
         {
             currentState = GameStatus.win;
         }
-        else if (totalKilled + totalEscaped >= totalEnemies)
+        else if (totalKilled + roundEscaped >= totalEnemies)
         {
             currentState = GameStatus.next;
         }
@@ -237,8 +251,10 @@ public class GameManager : MonoBehaviour {
                 totalEnemies = 3;
                 TotalEscaped = 0;
                 totalMoney = 10;
+                waveNumber = 1;
                 totalMoneyLabel.text = TotalMoney.ToString();
                 enemiesEscapedLabel.text = "Escaped : " + totalEscaped + "/10";
+                currentWaveLabel.text = "Wave " + waveNumber;
                 TowerManager.getInstance().renameBuildSiteTag();
                 TowerManager.getInstance().destroyAllTowers();
                 audioSource.PlayOneShot(SoundManager.getInstance().NewGame);
@@ -279,6 +295,12 @@ public class GameManager : MonoBehaviour {
         {
             TowerManager.getInstance().disableDragSprite();
             TowerManager.getInstance().selectedTowerBtn = null;
+
+            AccessoryManager.getInstance().disableDragSprite();
+            AccessoryManager.getInstance().selectedAccessory = null;
+
+            BuildSiteManager.getInstance().disableDragSprite();
+            BuildSiteManager.getInstance().selectedBuildSiteBtn = null;
         }
     }
 }

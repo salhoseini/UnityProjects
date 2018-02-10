@@ -82,6 +82,7 @@ public class AccessoryManager : MonoBehaviour {
             //registerTower(newTower);
             Accessories.Add(newAccessory);
             disableDragSprite();
+            selectedAccessory = null;
         }
     }
 
@@ -131,10 +132,17 @@ public class AccessoryManager : MonoBehaviour {
 
     public void resetAccessoriesList()
     {
+        accessories = new List<Accessory>();
         foreach(Accessory accessory in accessories)
         {
-            Destroy(accessory.gameObject);
+            if(accessory.IsDestroyed)
+            {
+                Destroy(accessory.gameObject);
+            }
+            else
+            {
+                accessories.Add(accessory);
+            }
         }
-        accessories.Clear();
     }
 }

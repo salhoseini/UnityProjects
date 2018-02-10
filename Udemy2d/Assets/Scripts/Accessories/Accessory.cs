@@ -76,6 +76,7 @@ public class Accessory : MonoBehaviour {
         // play tower hit audio
         if (health <= 0 || currentHealthInBar <= 0)
         {
+            GameManager.getInstance().AudioSource.PlayOneShot(SoundManager.getInstance().RoadBlockDestroyed);
             AccessoryManager.getInstance().destroyAccessory(this);
         }
     }
